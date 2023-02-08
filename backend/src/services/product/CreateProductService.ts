@@ -17,8 +17,31 @@ class CreateProductSevice {
     category_id,
   }: ProductRequest) {
 
-       
-    return { ok: true };
+    if (name === "") {
+      throw new Error("Name invalid...");
+    }
+
+    //verificar se produto já está cadastrado na plataforma
+    const productAlreadyExists = await prismaClient.product.findFirst({
+        where: { name: name },
+      });
+
+    if (productAlreadyExists) {
+        throw new Error("Product already exists...");
+    }
+
+
+    const product = await prismaClient.product.create({
+      data:{
+        name: name,
+        price: price,
+        description: description,
+        banner: banner,
+        category_id: category_id,
+      }
+    })
+
+    return product;
   }
 }
 
