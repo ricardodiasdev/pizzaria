@@ -17,7 +17,7 @@ class CreateProductSevice {
     category_id,
   }: ProductRequest) {
 
-    
+       
     return { ok: true };
   }
 }
