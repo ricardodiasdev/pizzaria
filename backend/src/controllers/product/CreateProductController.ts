@@ -1,4 +1,4 @@
-import { json, Request, Response } from "express";
+import { Request, Response } from "express";
 import { CreateProductSevice } from "../../services/product/CreateProductService";
 
 class CreateProductController {
