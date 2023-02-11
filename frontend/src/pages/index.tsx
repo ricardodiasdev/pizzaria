@@ -15,14 +15,15 @@ export default function Home() {
       </Head>
       <div className={styles.containerCenter}>
         <Image src={logoImg} alt="Logo da Pizzaria" />
-        <div className="styles log">
-          <form action="">
+        <div className={styles.login}>
+          <form>
             <Input placeholder="Digite seu email" type="text" />
             <Input placeholder="Digite sua senha" type="password" />
             <Button type="submit" loading={true}>
               Acessar
             </Button>
           </form>
+          <a  className={styles.text}>Não possui uma conta? Cadastre-se</a>
         </div>
       </div>
     </>
