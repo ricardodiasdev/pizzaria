@@ -1,6 +1,8 @@
 import { createContext, ReactNode, useState } from "react";
 
-import { destroyCookie } from "nookies";
+import { api } from "../services/apiClient";
+
+import { destroyCookie, setCookie, parseCookies } from "nookies";
 
 import Router from "next/router";
 
@@ -33,7 +35,7 @@ export const signOut = () => {
     destroyCookie(undefined, "@pizzaria.token");
     Router.push("/");
   } catch (error) {
-    console.log('Erro ao deslogar...')
+    console.log("Erro ao deslogar...");
   }
 };
 
@@ -43,7 +45,31 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const isAuthenticated = !!user;
 
   const signIn = async ({ email, password }: SignInProps) => {
-    console.log("Dados para logar: ", email, " - ", password);
+    try {
+      const response = await api.post("/session", { email, password });
+      // console.log(response.data);
+
+      const { id, name, token } = response.data;
+
+      setCookie(undefined, "@pizzaria.token", token, {
+        maxAge: 60 * 60 * 24 * 30, //expira em 1 mês
+        path: "/",
+      });
+
+      setUser({
+        id,
+        name,
+        email,
+      });
+
+      // passar para as próximas requisições o nosso token
+      api.defaults.headers["Authorization"] = `Bearer ${token}`;
+
+      // redirecionar o user para o /dashboard
+      Router.push("/dashboard");
+    } catch (error) {
+      console.log("Erro ao acessar", error);
+    }
   };
 
   return (
