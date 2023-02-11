@@ -5,15 +5,15 @@
   padding: 0.4rem;
   color: var(--white);
   border-radius: 0.5rem;
-  transition: filter .3s;
+  transition: filter 0.3s;
 
-  &[disabled]{
+  &[disabled] {
     cursor: not-allowed;
-    svg{
-        animation: animate 2s infinite;
+    svg {
+      animation: animate 2s infinite;
     }
   }
-  
+
   &:hover {
     filter: brightness(1.2);
   }
@@ -23,11 +23,11 @@
   color: var(--white);
 }
 
-@keyframes animate{
-    from {
-        transform: rotate(0deg);
-    }
-    to{
-        transform: rotate(360deg);
-    }
+@keyframes animate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

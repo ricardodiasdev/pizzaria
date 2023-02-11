@@ -9,7 +9,7 @@ import logoImg from "../../../public/logo.svg";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 
-const  Home = () => {
+const Home = () => {
   return (
     <>
       <Head>
@@ -34,6 +34,6 @@ const  Home = () => {
       </div>
     </>
   );
-}
+};
 
-export default Home
+export default Home;
