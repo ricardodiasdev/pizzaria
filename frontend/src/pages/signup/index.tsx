@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useContext } from "react";
 
 import Head from "next/head";
 import Image from "next/image";
@@ -11,26 +11,37 @@ import logoImg from "../../../public/logo.svg";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 
+import { AuthContext } from "../../contexts/AuthContext";
+
 const SignUp = () => {
+  const { signUp } = useContext(AuthContext);
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
 
-  const handleSignUp = async (event: FormEvent) =>{
-    event.preventDefault()
+  const handleSignUp = async (event: FormEvent) => {
+    event.preventDefault();
 
-    if(name === '' || email === '' || password === ''){
-      alert("Preencha todos os campos...")
-      return
+    if (name === "" || email === "" || password === "") {
+      alert("Preencha todos os campos...");
+      return;
     }
 
-    setLoading(true)
+    setLoading(true);
 
+    let data = {
+      name,
+      email,
+      password,
+    };
 
+    await signUp(data);
 
-  }
+    setLoading(false);
+  };
 
   return (
     <>
