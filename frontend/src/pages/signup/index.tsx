@@ -13,6 +13,8 @@ import { Button } from "../../components/ui/button";
 
 import { AuthContext } from "../../contexts/AuthContext";
 
+import { toast } from "react-toastify";
+
 const SignUp = () => {
   const { signUp } = useContext(AuthContext);
 
@@ -26,7 +28,7 @@ const SignUp = () => {
     event.preventDefault();
 
     if (name === "" || email === "" || password === "") {
-      alert("Preencha todos os campos...");
+      toast.error("Preencha todos os campos...");
       return;
     }
 
