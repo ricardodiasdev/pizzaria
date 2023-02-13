@@ -15,7 +15,7 @@ const Header = () => {
     <header className={styles.headerContainer}>
       <div className={styles.headerContent}>
         <Link href="/dashboard">
-          <Image src="/logo.svg" width={60} height={60} alt={"Logomarca"} />
+          <Image src="/logo.svg"  width={60} height={60} alt={"Logomarca"} />
         </Link>
         <nav className={styles.menuNav}>
           <Link legacyBehavior href="/category">

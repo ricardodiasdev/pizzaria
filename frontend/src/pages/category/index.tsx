@@ -1,9 +1,10 @@
 import Head from "next/head";
 import Header from "../../components/header";
 
+import styles from "./styles.module.scss";
+
 import { FormEvent, useState } from "react";
 
-import styles from "./styles.module.scss";
 import { toast } from "react-toastify";
 
 import setupAPIClient from "../../services/api";
@@ -32,7 +33,6 @@ const Category = () => {
       </Head>
       <div>
         <Header />
-
         <main className={styles.container}>
           <h1>Cadastrar categorias</h1>
           <form className={styles.form} onSubmit={handleRegister}>
