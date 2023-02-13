@@ -63,7 +63,7 @@ const SignUp = () => {
             />
             <Input
               placeholder="Digite seu email"
-              type="text"
+              type="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
             />

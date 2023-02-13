@@ -15,6 +15,8 @@ import { AuthContext } from "../contexts/AuthContext";
 
 import { toast } from "react-toastify";
 
+import { canSSRGuest } from "../utils/canSSRGuest";
+
 export default function Home() {
   const { signIn } = useContext(AuthContext);
 
@@ -54,7 +56,7 @@ export default function Home() {
           <form onSubmit={handleLogin}>
             <Input
               placeholder="Digite seu email"
-              type="text"
+              type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -76,3 +78,9 @@ export default function Home() {
     </>
   );
 }
+
+export const getServerSideProps = canSSRGuest(async (ctx) => {
+  return {
+    props: {},
+  };
+});
