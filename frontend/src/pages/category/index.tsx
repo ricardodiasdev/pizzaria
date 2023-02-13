@@ -6,12 +6,21 @@ import { FormEvent, useState } from "react";
 import styles from "./styles.module.scss";
 import { toast } from "react-toastify";
 
+import  setupAPIClient  from "../../services/api";
+
 const Category = () => {
   const [name, setName] = useState("");
 
   const handleRegister = async (e: FormEvent) => {
     e.preventDefault();
-    toast.success("Categoria " + name);
+
+    if (name === "") {
+      return;
+    }
+    const apiClient = setupAPIClient();
+    await apiClient.post("/category", { name: name });
+    toast.success("Categoria cadastrada com sucesso...");
+    setName("");
   };
 
   return (
