@@ -42,6 +42,7 @@ export const AuthContext = createContext({} as AuthContextData);
 export const signOut = () => {
   try {
     destroyCookie(undefined, "@pizzaria.token");
+    toast.success("Usuário deslogado...");
     Router.push("/");
   } catch (error) {
     console.log("Erro ao deslogar...");

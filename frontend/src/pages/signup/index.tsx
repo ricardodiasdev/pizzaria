@@ -51,7 +51,7 @@ const SignUp = () => {
         <title>Pizzaria - Faça seu cadastro agora!</title>
       </Head>
       <div className={styles.containerCenter}>
-        <Image src={logoImg} alt="Logo da Pizzaria" />
+        <Image src={logoImg} width={150} height={150} alt="Logo da Pizzaria" />
         <div className={styles.login}>
           <h1>Criando a sua conta</h1>
           <form onSubmit={handleSignUp}>
