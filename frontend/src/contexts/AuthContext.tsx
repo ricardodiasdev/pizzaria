@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useState, useEffect } from "react";
 
 import { api } from "../services/apiClient";
 
@@ -6,7 +6,7 @@ import { destroyCookie, setCookie, parseCookies } from "nookies";
 
 import Router from "next/router";
 
-import { toast} from 'react-toastify'
+import { toast } from "react-toastify";
 
 type AuthContextData = {
   user: UserProps;
@@ -45,6 +45,7 @@ export const signOut = () => {
     Router.push("/");
   } catch (error) {
     console.log("Erro ao deslogar...");
+    toast.error("Erro ao acessar!");
   }
 };
 
@@ -52,6 +53,23 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<UserProps>();
 
   const isAuthenticated = !!user;
+
+  useEffect(() => {
+    const { "@pizzaria.token": token } = parseCookies();
+
+    if (token) {
+      api
+        .get("/me")
+        .then((response) => {
+          const { id, name, email } = response.data;
+
+          setUser({ id, name, email });
+        })
+        .catch(() => {
+          signOut();
+        });
+    }
+  }, []);
 
   const signIn = async ({ email, password }: SignInProps) => {
     try {
@@ -78,7 +96,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       // redirecionar o user para o /dashboard
       Router.push("/dashboard");
     } catch (error) {
-      toast.error("Erro ao acessar!")
+      toast.error("Erro ao acessar!");
       console.log("Erro ao acessar", error);
     }
   };
@@ -91,13 +109,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         password,
       });
 
-
-      toast.success("Conta criada com sucesso!")
+      toast.success("Conta criada com sucesso!");
       console.log("Cadastrado com sucesso...");
 
       Router.push("/");
     } catch (error) {
-      toast.error("Erro ao cadastrar!")
+      toast.error("Erro ao cadastrar!");
       console.log("Erro ao cadastrar...", error);
     }
   };
