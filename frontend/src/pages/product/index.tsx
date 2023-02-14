@@ -7,9 +7,25 @@ import Header from "../../components/header";
 import { canSSRAuth } from "../../utils/canSSRAuth";
 import { FiUpload } from "react-icons/fi";
 
-const Product = () => {
+import setupAPIClient from "../../services/api";
+
+type ItemProps = {
+  id: string;
+  name: string;
+};
+
+interface CategoryProps {
+  categoryList: ItemProps[];
+}
+
+const Product = ({ categoryList }: CategoryProps) => {
+  // console.log(categoryList);
+
   const [avatarUrl, setAvatarUrl] = useState("");
   const [imageAvatar, setImageAvatar] = useState(null);
+
+  const [categories, setCategories] = useState(categoryList || []);
+  const [categorySelected, setCategorySelected] = useState(0);
 
   const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) {
@@ -26,6 +42,11 @@ const Product = () => {
       setImageAvatar(image);
       setAvatarUrl(URL.createObjectURL(e.target.files[0]));
     }
+  };
+
+  const handleChangeCategory = (event) => {
+    // console.log('Index das categoria - ', event.target.value);
+    setCategorySelected(event.target.value);
   };
 
   return (
@@ -58,9 +79,14 @@ const Product = () => {
                 />
               )}
             </label>
-            <select name="" id="">
-              <option value="">Bebidas</option>
-              <option value="">Pizzas</option>
+            <select value={categorySelected} onChange={handleChangeCategory}>
+              {categories.map((item, index) => {
+                return (
+                  <option key={item.id} value={index}>
+                    {item.name}
+                  </option>
+                );
+              })}
             </select>
             <input
               className={styles.input}
@@ -89,7 +115,13 @@ const Product = () => {
 export default Product;
 
 export const getServerSideProps = canSSRAuth(async (ctx) => {
+  const apiClient = setupAPIClient(ctx);
+
+  const response = await apiClient.get("/category");
+
   return {
-    props: {},
+    props: {
+      categoryList: response.data,
+    },
   };
 });
