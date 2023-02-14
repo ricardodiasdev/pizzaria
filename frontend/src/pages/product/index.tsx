@@ -1,6 +1,6 @@
 import styles from "./styles.module.scss";
 
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import Head from "next/head";
 import Header from "../../components/header";
 
@@ -8,6 +8,7 @@ import { canSSRAuth } from "../../utils/canSSRAuth";
 import { FiUpload } from "react-icons/fi";
 
 import setupAPIClient from "../../services/api";
+import { toast } from "react-toastify";
 
 type ItemProps = {
   id: string;
@@ -26,6 +27,10 @@ const Product = ({ categoryList }: CategoryProps) => {
 
   const [categories, setCategories] = useState(categoryList || []);
   const [categorySelected, setCategorySelected] = useState(0);
+
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
 
   const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) {
@@ -49,6 +54,45 @@ const Product = ({ categoryList }: CategoryProps) => {
     setCategorySelected(event.target.value);
   };
 
+  const handleRegisterProduct = async (event: FormEvent) => {
+    event.preventDefault();
+
+    try {
+      const data = new FormData();
+
+      if (
+        name === "" ||
+        price === "" ||
+        description === "" ||
+        imageAvatar === null
+      ) {
+        toast.error("Preencha todos os campos...");
+        return;
+      }
+
+      data.append("name", name);
+      data.append("price", price);
+      data.append("description", description);
+      data.append("category_id", categories[categorySelected].id);
+      data.append("file", imageAvatar);
+
+      const apiClient = setupAPIClient();
+
+      await apiClient.post("/product", data);
+
+      toast.success("Produto cadastrado com sucesso!");
+    } catch (error) {
+      console.log(error);
+      toast.error("Ops.. Erro ao cadastrar!");
+    }
+
+    setName('')
+    setPrice('')
+    setDescription('')
+    setImageAvatar(null)
+    setAvatarUrl('')
+  };
+
   return (
     <>
       <Head>
@@ -58,7 +102,7 @@ const Product = ({ categoryList }: CategoryProps) => {
         <Header />
         <main className={styles.container}>
           <h1>Novo produto</h1>
-          <form className={styles.form}>
+          <form className={styles.form} onSubmit={handleRegisterProduct}>
             <label className={styles.labelAvatar}>
               <span>
                 <FiUpload size={30} color="white" />
@@ -92,15 +136,21 @@ const Product = ({ categoryList }: CategoryProps) => {
               className={styles.input}
               type="text"
               placeholder="Digite o nome do produto"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
             <input
               className={styles.input}
               type="text"
               placeholder="Digite o preço do produto"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
             />
             <textarea
               className={styles.input}
               placeholder="Descreva seu produto..."
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             />
             <button className={styles.buttonAdd} type="submit">
               Cadastrar
