@@ -31,22 +31,28 @@ const ModalOrder = ({ isOpen, onRequestClose, order }: ModalOrderProps) => {
         className="react-model-close"
         style={{ background: "transparent", border: 0 }}
       >
-        <FiX size={45} color="#F34748"/>
+        <FiX size={45} color="#F34748" />
       </button>
       <div className={styles.container}>
-
         <h2>Detalhes do pedido</h2>
         <span className={styles.table}>
-            Mesa: <strong>{order[0].order.table}</strong>
+          Mesa: <strong>{order[0].order.table}</strong>
         </span>
 
-        {order.map(item => (
-            <section key={item.id} className={styles.containerItem}>
-                <span>{item.amount} - <strong>{item.product.name}</strong></span>
-                <span className={styles.description}>{item.product.description}</span>
-            </section>
+        {order.map((item) => (
+          <section key={item.id} className={styles.containerItem}>
+            <span>
+              {item.amount} - <strong>{item.product.name}</strong>
+            </span>
+            <span className={styles.description}>
+              {item.product.description}
+            </span>
+          </section>
         ))}
-        
+
+        <button className={styles.buttonOrder} onClick={() => {}}>
+          Concluir pedido
+        </button>
       </div>
     </Modal>
   );
