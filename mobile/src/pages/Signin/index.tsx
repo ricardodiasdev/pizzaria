@@ -11,17 +11,17 @@ import {
 import { AuthContext } from "../../contexts/AuthContext";
 
 const SignIn = () => {
-  const {user} = useContext(AuthContext);
+  const {signIn} = useContext(AuthContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (email === "" || password === "") {
       return;
     }
 
-    console.log("Email digitado: " + email);
+    await signIn({email, password})
   };
 
   return (
