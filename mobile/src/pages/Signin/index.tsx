@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState, useContext } from "react";
 import {
   View,
   Text,
@@ -8,18 +8,21 @@ import {
   TouchableOpacity,
 } from "react-native";
 
+import { AuthContext } from "../../contexts/AuthContext";
+
 const SignIn = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const {user} = useContext(AuthContext);
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleLogin = () => {
-    if(email === '' || password === ''){
-      return
+    if (email === "" || password === "") {
+      return;
     }
 
-    console.log("Email digitado: " + email)
-  }
-
+    console.log("Email digitado: " + email);
+  };
 
   return (
     <View style={styles.container}>
@@ -81,17 +84,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     color: "#FFF",
   },
-  button:{
-    width: '95%',
+  button: {
+    width: "95%",
     height: 40,
-    backgroundColor:'#3FFFA3',
+    backgroundColor: "#3FFFA3",
     borderRadius: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
-  buttonText:{
+  buttonText: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#101026'
-  }
+    fontWeight: "bold",
+    color: "#101026",
+  },
 });
