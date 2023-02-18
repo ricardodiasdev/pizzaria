@@ -24,7 +24,7 @@ const Dashboard = () => {
     }
   
     // fazendo a requisição e navegar para a próxima tela
-    navigation.navigate('Order', {number: number, order_id:''});
+    navigation.navigate('Order', {number: number, order_id:'b4fbed32-bd2d-4a3b-bd5d-ba631e6ffb45'});
 
   };
 
