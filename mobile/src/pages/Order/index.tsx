@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -20,12 +20,32 @@ type RouteDetailParams = {
   };
 };
 
+type CategoryProps = {
+  id: string;
+  name: string;
+};
+
 type OrderRouteProps = RouteProp<RouteDetailParams, "Order">;
 
 const Order = () => {
   const route = useRoute<OrderRouteProps>();
 
   const navigation = useNavigation();
+
+  const [category, setCategory] = useState<CategoryProps[] | []>([]);
+  const [categorySelected, setCategorySelected] = useState<CategoryProps>();
+
+  const [amount, setAmount] = useState("1");
+
+  useEffect(() => {
+    const loadInfo = async () => {
+      const response = await api.get("/category");
+      setCategory(response.data);
+      setCategorySelected(response.data[0]);
+    };
+
+    loadInfo();
+  }, []);
 
   const handleCloseOrder = async () => {
     try {
@@ -55,9 +75,11 @@ const Order = () => {
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={styles.input}>
-        <Text style={{ color: "#FFF" }}>Pizzas</Text>
-      </TouchableOpacity>
+      {category.length !== 0 && (
+        <TouchableOpacity style={styles.input}>
+         <Text style={{ color: "#FFF" }}>{categorySelected?.name}</Text>
+       </TouchableOpacity>
+      )}
 
       <TouchableOpacity style={styles.input}>
         <Text style={{ color: "#FFF" }}>Pizza de Calabresa</Text>
@@ -70,7 +92,8 @@ const Order = () => {
           placeholder="1"
           placeholderTextColor="#F0F0F0"
           keyboardType="numeric"
-          value="12"
+          value={amount}
+          onChangeText={setAmount}
         />
       </View>
       <View style={styles.actions}>
