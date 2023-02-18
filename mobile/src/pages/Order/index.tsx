@@ -7,9 +7,11 @@ import {
   TextInput,
 } from "react-native";
 
-import { useRoute, RouteProp } from "@react-navigation/native";
+import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
 
 import { Feather } from "@expo/vector-icons";
+
+import { api } from "../../services/api";
 
 type RouteDetailParams = {
   Order: {
@@ -22,12 +24,34 @@ type OrderRouteProps = RouteProp<RouteDetailParams, "Order">;
 
 const Order = () => {
   const route = useRoute<OrderRouteProps>();
+
+  const navigation = useNavigation();
+
+  const handleCloseOrder = async () => {
+    try {
+      await api.delete("/order", {
+        params: {
+          order_id: route.params?.order_id,
+        },
+      });
+
+      navigation.goBack();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Mesa {route.params.number}</Text>
         <TouchableOpacity>
-          <Feather name="trash-2" size={28} color="#FF3F4B" />
+          <Feather
+            name="trash-2"
+            size={28}
+            color="#FF3F4B"
+            onPress={handleCloseOrder}
+          />
         </TouchableOpacity>
       </View>
 
@@ -42,7 +66,7 @@ const Order = () => {
       <View style={styles.qtdContainer}>
         <Text style={styles.qtdText}>Quantidade</Text>
         <TextInput
-          style={[styles.input, {width: '60%', textAlign: 'center'}]}
+          style={[styles.input, { width: "60%", textAlign: "center" }]}
           placeholder="1"
           placeholderTextColor="#F0F0F0"
           keyboardType="numeric"
@@ -87,48 +111,47 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 40,
     marginBottom: 12,
-    justifyContent: 'center',
+    justifyContent: "center",
     paddingHorizontal: 8,
-    color: '#FFF',
+    color: "#FFF",
     fontSize: 20,
   },
-  qtdContainer:{
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent:'space-between',
+  qtdContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
-  qtdText:{
+  qtdText: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#FFF',
+    fontWeight: "bold",
+    color: "#FFF",
   },
-  actions:{
-    flexDirection: 'row',
-    width: '100%',
-    justifyContent: 'space-between'
+  actions: {
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "space-between",
   },
-  buttonAdd:{
-    width: '20%',
-    backgroundColor: '#3FD1FF',
+  buttonAdd: {
+    width: "20%",
+    backgroundColor: "#3FD1FF",
     borderRAdius: 4,
     height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
-  buttonText:{
-    color: '#101026',
+  buttonText: {
+    color: "#101026",
     fontSize: 18,
-    fontWeight: 'bold'
+    fontWeight: "bold",
   },
-  button:{
-    backgroundColor: '#3FFFA3',
+  button: {
+    backgroundColor: "#3FFFA3",
     borderRadius: 4,
     height: 40,
-    width: '75%',
-    alignItems: 'center',
-    justifyContent: 'center'
-
-  }
+    width: "75%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
 
 export default Order;

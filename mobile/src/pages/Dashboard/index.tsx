@@ -13,8 +13,11 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/ty
 
 import { StackParamsList } from "../../routes/app.routes";
 
+import { api } from "../../services/api";
+
 const Dashboard = () => {
-  const navigation = useNavigation<NativeStackNavigationProp<StackParamsList>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<StackParamsList>>();
 
   const [number, setNumber] = useState("");
 
@@ -22,10 +25,21 @@ const Dashboard = () => {
     if (number === "") {
       return;
     }
-  
-    // fazendo a requisição e navegar para a próxima tela
-    navigation.navigate('Order', {number: number, order_id:'b4fbed32-bd2d-4a3b-bd5d-ba631e6ffb45'});
+    try {
+      const response = await api.post("/order", { table: Number(number) });
 
+      // console.log(response.data)
+
+      navigation.navigate("Order", {
+        number: number,
+        order_id: response.data.id,
+      });
+
+      setNumber("");
+    } catch (error) {
+      console.log(error);
+      return;
+    }
   };
 
   return (
