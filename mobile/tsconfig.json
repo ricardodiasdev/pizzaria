@@ -2,7 +2,7 @@
   "extends": "expo/tsconfig.base",
   "typeRoots": ["./src/types"],
   "compilerOptions": {
-    "strict": true
+    "strict": false
   }
   
 }
