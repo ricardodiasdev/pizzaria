@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   Modal,
+  FlatList
 } from "react-native";
 
 import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
@@ -15,6 +16,8 @@ import { Feather } from "@expo/vector-icons";
 import { api } from "../../services/api";
 
 import ModalPicker from "../components/ModalPicker";
+
+import ListItem from '../components/ListItem';
 
 type RouteDetailParams = {
   Order: {
@@ -31,6 +34,13 @@ export type CategoryProps = {
 type ProductProps = {
   id: string;
   name: string;
+};
+
+type ItemProps = {
+  id: string;
+  product_id: string;
+  name: string;
+  amount: string | number;
 };
 
 type OrderRouteProps = RouteProp<RouteDetailParams, "Order">;
@@ -52,6 +62,8 @@ const Order = () => {
     ProductProps | undefined
   >();
   const [modalProductVisible, setModalProductVisible] = useState(false);
+
+  const [items, setItems] = useState<ItemProps[] | []>([]);
 
   const [amount, setAmount] = useState("1");
 
@@ -104,6 +116,10 @@ const Order = () => {
     setProductSelected(item);
   };
 
+  const handleAddItem = async () => {
+    console.log('Adicionou...')
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -128,7 +144,10 @@ const Order = () => {
       )}
 
       {products.length !== 0 && (
-        <TouchableOpacity style={styles.input} onPress={() => setModalProductVisible(true)}>
+        <TouchableOpacity
+          style={styles.input}
+          onPress={() => setModalProductVisible(true)}
+        >
           <Text style={{ color: "#FFF" }}>{productSelected?.name}</Text>
         </TouchableOpacity>
       )}
@@ -145,13 +164,23 @@ const Order = () => {
         />
       </View>
       <View style={styles.actions}>
-        <TouchableOpacity style={styles.buttonAdd}>
+        <TouchableOpacity style={styles.buttonAdd} onPress={handleAddItem}>
           <Text style={styles.buttonText}>+</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={[styles.button, { opacity: items.length === 0 ? 0.3 : 1 }]}
+          disabled={items.length === 0}
+        >
           <Text style={styles.buttonText}>Avançar</Text>
         </TouchableOpacity>
       </View>
+      <FlatList
+        showsHorizontalScrollIndicator={false}
+        style={{flex: 1, marginTop: 24}}
+        data={items}
+        keyExtractor={(item) => item.id}
+        renderItem = {({item}) => <ListItem data={item}/>}
+      />
       <Modal
         transparent={true}
         visible={modalCategoryVisible}
@@ -161,12 +190,13 @@ const Order = () => {
           handleCloseModal={() => setModalCategoryVisible(false)}
           options={category}
           selectedItem={handleChangeCategory}
+          
         />
       </Modal>
       <Modal
         transparent={true}
         visible={modalProductVisible}
-        animationType='fade'
+        animationType="fade"
       >
         <ModalPicker
           handleCloseModal={() => setModalProductVisible(false)}
