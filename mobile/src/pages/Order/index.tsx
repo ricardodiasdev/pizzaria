@@ -47,7 +47,7 @@ const Order = () => {
 
   const [modalCategoryVisible, setModalCategoryVisible] = useState(false);
 
-  const [product, setProducts] = useState<ProductProps[] | []>([]);
+  const [products, setProducts] = useState<ProductProps[] | []>([]);
   const [productSelected, setProductSelected] = useState<
     ProductProps | undefined
   >();
@@ -100,6 +100,10 @@ const Order = () => {
     setCategorySelected(item);
   };
 
+  const handleChangeProduct = (item: ProductProps) => {
+    setProductSelected(item);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -123,8 +127,8 @@ const Order = () => {
         </TouchableOpacity>
       )}
 
-      {product.length !== 0 && (
-        <TouchableOpacity style={styles.input}>
+      {products.length !== 0 && (
+        <TouchableOpacity style={styles.input} onPress={() => setModalProductVisible(true)}>
           <Text style={{ color: "#FFF" }}>{productSelected?.name}</Text>
         </TouchableOpacity>
       )}
@@ -157,6 +161,17 @@ const Order = () => {
           handleCloseModal={() => setModalCategoryVisible(false)}
           options={category}
           selectedItem={handleChangeCategory}
+        />
+      </Modal>
+      <Modal
+        transparent={true}
+        visible={modalProductVisible}
+        animationType='fade'
+      >
+        <ModalPicker
+          handleCloseModal={() => setModalProductVisible(false)}
+          options={products}
+          selectedItem={handleChangeProduct}
         />
       </Modal>
     </View>
