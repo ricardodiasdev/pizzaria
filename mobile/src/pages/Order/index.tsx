@@ -19,6 +19,10 @@ import ModalPicker from "../components/ModalPicker";
 
 import ListItem from "../components/ListItem";
 
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
+import { StackParamsList } from "../../routes/app.routes";
+
 type RouteDetailParams = {
   Order: {
     number: string | number;
@@ -48,7 +52,7 @@ type OrderRouteProps = RouteProp<RouteDetailParams, "Order">;
 const Order = () => {
   const route = useRoute<OrderRouteProps>();
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<StackParamsList>>();
 
   const [category, setCategory] = useState<CategoryProps[] | []>([]);
   const [categorySelected, setCategorySelected] = useState<
@@ -140,12 +144,16 @@ const Order = () => {
       },
     });
 
-    let remainItem = items.filter(item => {
-      return (item['id'] !== item_id)
-    })
+    let remainItem = items.filter((item) => {
+      return item["id"] !== item_id;
+    });
 
-    setItems(remainItem)
+    setItems(remainItem);
   };
+
+  const handleFinishOrder = async () => {
+    navigation.navigate('FinishOrder')
+  }
 
   return (
     <View style={styles.container}>
@@ -199,6 +207,7 @@ const Order = () => {
         <TouchableOpacity
           style={[styles.button, { opacity: items.length === 0 ? 0.3 : 1 }]}
           disabled={items.length === 0}
+          onPress={handleFinishOrder}
         >
           <Text style={styles.buttonText}>Avançar</Text>
         </TouchableOpacity>
