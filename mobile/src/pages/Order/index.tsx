@@ -133,20 +133,34 @@ const Order = () => {
     setItems((oldArray) => [...oldArray, data]);
   };
 
+  const handleDeleteItem = async (item_id: string) => {
+    await api.delete("/order/remove", {
+      params: {
+        item_id: item_id,
+      },
+    });
+
+    let remainItem = items.filter(item => {
+      return (item['id'] !== item_id)
+    })
+
+    setItems(remainItem)
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Mesa {route.params.number}</Text>
-          {items.length === 0 && (
-            <TouchableOpacity>
-              <Feather
-                name="trash-2"
-                size={28}
-                color="#FF3F4B"
-                onPress={handleCloseOrder}
-              />
-            </TouchableOpacity>
-          )}
+        {items.length === 0 && (
+          <TouchableOpacity>
+            <Feather
+              name="trash-2"
+              size={28}
+              color="#FF3F4B"
+              onPress={handleCloseOrder}
+            />
+          </TouchableOpacity>
+        )}
       </View>
 
       {category.length !== 0 && (
@@ -194,7 +208,9 @@ const Order = () => {
         style={{ flex: 1, marginTop: 24 }}
         data={items}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <ListItem data={item} />}
+        renderItem={({ item }) => (
+          <ListItem data={item} deleteItem={handleDeleteItem} />
+        )}
       />
       <Modal
         transparent={true}

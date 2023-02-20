@@ -11,15 +11,20 @@ interface ItemProps {
     name: string;
     amount: string | number;
   };
+  deleteItem: (item_id: string) => void;
 }
 
-const ListItem = ({ data }: ItemProps) => {
+const ListItem = ({ data, deleteItem }: ItemProps) => {
+  const handleDeleteItem = () => {
+    deleteItem(data.id);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.item}>
         {data.amount} - {data.name}
       </Text>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handleDeleteItem}>
         <Feather name="trash-2" color="#FF3F4B" size={25} />
       </TouchableOpacity>
     </View>
@@ -28,20 +33,20 @@ const ListItem = ({ data }: ItemProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#101026',
+    backgroundColor: "#101026",
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexDirection: "row",
     marginBottom: 12,
     paddingVertical: 12,
     paddingHorizontal: 12,
     borderRadius: 4,
     borderWidth: 0.3,
-    borderColor: '#8A8A8A'
+    borderColor: "#8A8A8A",
   },
   item: {
-    color: '#FFF'
+    color: "#FFF",
   },
 });
 
