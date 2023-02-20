@@ -52,7 +52,8 @@ type OrderRouteProps = RouteProp<RouteDetailParams, "Order">;
 const Order = () => {
   const route = useRoute<OrderRouteProps>();
 
-  const navigation = useNavigation<NativeStackNavigationProp<StackParamsList>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<StackParamsList>>();
 
   const [category, setCategory] = useState<CategoryProps[] | []>([]);
   const [categorySelected, setCategorySelected] = useState<
@@ -152,8 +153,11 @@ const Order = () => {
   };
 
   const handleFinishOrder = async () => {
-    navigation.navigate('FinishOrder')
-  }
+    navigation.navigate("FinishOrder", {
+      number: route.params?.number,
+      order_id: route.params?.order_id,
+    });
+  };
 
   return (
     <View style={styles.container}>
